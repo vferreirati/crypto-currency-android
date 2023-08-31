@@ -27,14 +27,27 @@ fun CoinListScreen(
 ) {
     val state = viewModel.state.value
 
+    CoinListScreenContent(
+        state,
+        onItemClick = { coinId ->
+            navController.navigate(
+                Screen.CoinDetailScreen.route + "/$coinId"
+            )
+        }
+    )
+}
+
+@Composable
+fun CoinListScreenContent(
+    state: CoinListState,
+    onItemClick: (String) -> Unit,
+) {
     Box(modifier = Modifier.fillMaxSize()) {
         LazyColumn(modifier = Modifier.fillMaxSize()) {
             items(state.coins) { coin ->
                 CoinListItem(
                     coin = coin,
-                    onItemClick = {
-                        navController.navigate(Screen.CoinDetailScreen.route + "/${coin.id}")
-                    }
+                    onItemClick = { onItemClick(it.id) }
                 )
             }
         }

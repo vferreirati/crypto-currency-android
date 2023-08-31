@@ -1,7 +1,6 @@
 package com.vferreirati.cryptocurrencyapp.presentation.coin_detail
 
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -25,22 +24,32 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
-import com.vferreirati.cryptocurrencyapp.presentation.Screen
+import com.vferreirati.cryptocurrencyapp.data.remote.dto.TeamMember
+import com.vferreirati.cryptocurrencyapp.domain.model.CoinDetail
 import com.vferreirati.cryptocurrencyapp.presentation.coin_detail.components.CoinTag
 import com.vferreirati.cryptocurrencyapp.presentation.coin_detail.components.TeamListItem
+import com.vferreirati.cryptocurrencyapp.presentation.ui.theme.CryptoCurrencyAppTheme
 
-
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun CoinDetailScreen(
-    navController: NavController,
     viewModel: CoinDetailViewModel = hiltViewModel()
 ) {
     val state = viewModel.state.value
 
+    CoinDetailScreenContent(
+        state = state,
+    )
+}
+
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+fun CoinDetailScreenContent(
+    state: CoinDetailState
+) {
     Box(modifier = Modifier.fillMaxSize()) {
         state.coin?.let { coin ->
             LazyColumn(
@@ -117,5 +126,37 @@ fun CoinDetailScreen(
             CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
         }
 
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun CoinDetailScreenContentPreview() {
+    CryptoCurrencyAppTheme {
+        CoinDetailScreenContent(
+            state = CoinDetailState(
+                coin = CoinDetail(
+                    name = "Test coin",
+                    coinId = "btc",
+                    description = "Test cooooin",
+                    isActive = true,
+                    rank = 1,
+                    symbol = "btc",
+                    tags = listOf("Proof of work", "Best coin"),
+                    team = listOf(
+                        TeamMember(
+                            id = "",
+                            name = "Satoshi Nakamoto",
+                            position = "Founder"
+                        ),
+                        TeamMember(
+                            id = "",
+                            name = "vferreirati",
+                            position = "Developer"
+                        ),
+                    )
+                )
+            )
+        )
     }
 }
